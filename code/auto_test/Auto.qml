@@ -29,8 +29,7 @@ Item {
         id: windowCom
 
         Window {
-            id: w
-            onClosing: w.destroy()
+            onClosing: destroy()
         }
     }
 

@@ -13,7 +13,7 @@ Item {
     TaskExcutor {
         id: taskExcutor
         repeat: true
-        interval: 500
+        interval: 1000
         triggeredOnStart: true
         queueModel: false
 
@@ -25,9 +25,9 @@ Item {
 
     Task {
         id: task1
-//        async: true
+        async: true
         run: function() {
-            console.log("start...");
+            console.log("start task 1...");
             Commont.ajax("GET", "https://api.github.com/zen", {}, "", function(xhr){
                 console.log("task1 : " + xhr.responseText);
                 task1.finished({});
@@ -37,9 +37,9 @@ Item {
 
     Task {
         id: task2
-//        async: true
+        async: true
         run: function() {
-            console.log("start...");
+            console.log("start task 2...");
             Commont.ajax("GET", "https://api.github.com/zen", {}, "", function(xhr){
                 console.log("task2: " + xhr.responseText);
                 task2.finished({});
@@ -49,8 +49,5 @@ Item {
 
     Component.onCompleted: {
         taskExcutor.start();
-
-
-        console.log(Commont.randomString(16, false))
     }
 }
