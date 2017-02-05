@@ -2375,7 +2375,9 @@ showdown.subParser('paragraphs', function (text, options, globals) {
         grafsOutIt = grafsOut[i],
         codeFlag = false;
     // if this is a marker for an html block...
-    while (grafsOutIt.search(/¨(K|G)(\d+)\1/) >= 0) {
+    //: [0] QTBUG-58638
+    while (/¨(K|G)(\d+)\1/.test(grafsOutIt)) {
+    //: [0] QTBUG-58638
 
       var delim = RegExp.$1,
           num   = RegExp.$2;
