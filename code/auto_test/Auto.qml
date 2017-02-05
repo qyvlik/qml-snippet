@@ -11,15 +11,22 @@ Item {
     property real windowHeight: 640
 
     function openTestWindow(testName, filePath) {
-        var w = windowCom.createObject(null,
-                                       {x:0,y:0, width: windowWidth, height: windowHeight});
+
         var com = Qt.createComponent(filePath, Component.PreferSynchronous);
         if (com.status === Component.Ready) {
-            var test = com.createObject(w);
-            w.title = testName;
-            w.show();
+            var testItem = com.createObject();
+            if(!instanceOf.isWindow(testItem)) {
+                var w = windowCom.createObject(null,
+                                               {x:0,y:0, width: windowWidth, height: windowHeight});
+                testItem.parent = w.contentItem;
+                w.title = testName;
+                w.show();
+            } else {
+                testItem.title = testName;
+                testItem.show();
+            }
+
         } else {
-            w.destroy();
             console.log(com.errorString(), com.status);
         }
     }
@@ -35,6 +42,22 @@ Item {
     FolderListModel {
         id: folderListModel
         showFiles: false
+    }
+
+    QtObject {
+        id: instanceOf
+        property Window __window: null
+
+        function isWindow(w) {
+            try {
+                __window = w;
+                return true;
+            } catch(e) {
+                return false;
+            } finally {
+                __window = null;
+            }
+        }
     }
 
 }
