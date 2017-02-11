@@ -5,47 +5,46 @@ import Qt.labs.settings 1.0
 
 import "../../../task"
 
+import "../../../commont/commont.js" as Commont
+
 Item {
     id: root
     width: 360
     height: 640
 
-    Task {
-        id: task
-        run: function() {
-            console.log("task...")
-        }
-    }
-
-    TaskExcutor {
-        taskList: [task]
-    }
-
-
-    ListView {
+    AppListView {
         id: listView
-
-        PullDown {
-            id: pullDown
-            flickable: listView
-            offestY: 50
-            onRelease: {
-                console.log("release")
-            }
-        }
-
         anchors.fill: parent
+
         anchors.margins: 10
-        model: 10
         clip: true
+
         delegate: Item {
             width: parent.width
-            height: width * 0.6
+            height: width * 0.2
             Rectangle {
                 anchors.fill: parent
                 border.color: "gray"
                 border.width: 1
+
+                Text {
+                    anchors.centerIn: parent
+                    text: zen
+                }
             }
+        }
+
+        model: listModel
+
+        ListModel {
+            id: listModel
+        }
+
+        onPullDowning: {
+            Commont.ajax("GET", "https://api.github.com/zen", {}, {}, function(xhr){
+                listModel.insert(0, {"zen": xhr.responseText});
+                listView.release();
+            });
         }
     }
 
