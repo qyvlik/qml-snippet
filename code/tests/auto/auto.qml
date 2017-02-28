@@ -52,4 +52,9 @@ Item {
         anchors.centerIn: parent
         text: auto.folderListModel.folder
     }
+
+
+
+
+
 }

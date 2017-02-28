@@ -34,7 +34,7 @@ function ajax(method, url, headers, data, callable) {
         if(xhr.readyState == xhr.DONE) {
             callable(xhr);
         }
-    }
+    };
     xhr.open(method, url);
     setHeader(xhr, headers);
     if("GET" === method) {
@@ -97,6 +97,24 @@ function readFileAsync(file, callable, error) {
             callable(xhr.responseText);
         }
     });
+}
+
+function writeTextFileAsync(file, content, callback) {
+    callback = callback || function(xhr) {
+        console.log("AllResponseHeaders:", xhr.getAllResponseHeaders());
+        console.log("length:", xhr.responseText.length);
+    }
+
+    var xhr = new XMLHttpRequest;
+
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == xhr.DONE) {
+            callback(xhr);
+        }
+    }
+    console.log("file", file);
+    xhr.open("PUT", file);
+    xhr.send(content);
 }
 
 function stringNotEmpty(str) {

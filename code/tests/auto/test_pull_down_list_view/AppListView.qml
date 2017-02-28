@@ -11,6 +11,8 @@ ListView {
 
     readonly property alias pullDown: pullDown
 
+
+    headerPositioning: ListView.PullBackHeader
     header: Item {
         width: listView.width
         height: 0
@@ -33,7 +35,7 @@ ListView {
     PullDown {
         id: pullDown
         flickable: listView
-        offestY: 50
+        offestY: 0
         onRelease: {
             listView.__whenPullDown();
         }
@@ -52,7 +54,7 @@ ListView {
     function release() {
         listView.headerItem.busyer.running = false;
         lazyer.lazyDo(300, function(){
-            listView.headerItem.height = 0;
+             listView.headerItem.height = 0;
         });
 
     }
