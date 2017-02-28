@@ -41,9 +41,6 @@ Item {
 //            listAll();
             testMd5();
             testSHA256();
-
-            console.log(CryptoJS.CryptoJS.mode.ECB)
-
             console.log(encrypt("ddd"))
         }
     }
