@@ -34,7 +34,6 @@ Item {
         return encrypted.toString();
     }
 
-
     MouseArea {
         anchors.fill: parent
         onClicked: {
