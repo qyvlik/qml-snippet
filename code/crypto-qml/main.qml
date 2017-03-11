@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-import "./crypto-js/crypto-js.js" as CryptoJS
+import "./crypto-js/crypto-js.js" as CryptoJSLib
 
 Item {
 
@@ -8,28 +8,28 @@ Item {
     height: 640
 
     function listAll() {
-        for(var iter in CryptoJS["CryptoJS"]) {
-            console.log(iter, CryptoJS["CryptoJS"][iter])
+        for(var iter in CryptoJSLib["CryptoJS"]) {
+            console.log(iter, CryptoJSLib["CryptoJS"][iter])
         }
     }
 
     function testMd5() {
-        var encrypted = CryptoJS.CryptoJS.MD5("");
+        var encrypted = CryptoJSLib.CryptoJS.MD5("");
         console.log("md5:", encrypted);
     }
 
     function testSHA256() {
-        var encrypted = CryptoJS.CryptoJS.SHA256("");
+        var encrypted = CryptoJSLib.CryptoJS.SHA256("");
         console.log("SHA256:", encrypted);
     }
 
     function encrypt(word){
-        var key = CryptoJS.CryptoJS.enc.Utf8.parse("0102030405060708");   //加密密钥
-        var iv  = CryptoJS.CryptoJS.enc.Utf8.parse('0102030405060708');   //加密向量
-        var srcs = CryptoJS.CryptoJS.enc.Utf8.parse(word);
-        var encrypted = CryptoJS.CryptoJS.AES.encrypt(srcs, key, {
+        var key = CryptoJSLib.CryptoJS.enc.Utf8.parse("0102030405060708");   //加密密钥
+        var iv  = CryptoJSLib.CryptoJS.enc.Utf8.parse('0102030405060708');   //加密向量
+        var srcs = CryptoJSLib.CryptoJS.enc.Utf8.parse(word);
+        var encrypted = CryptoJSLib.CryptoJS.AES.encrypt(srcs, key, {
                                                           iv: iv,
-                                                          mode: CryptoJS.CryptoJS.mode.CBC
+                                                          mode: CryptoJSLib.CryptoJS.mode.CBC
                                                       });
         return encrypted.toString();
     }
