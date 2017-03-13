@@ -5,6 +5,7 @@ import QtQuick.Window 2.2
 import Qt.labs.folderlistmodel 2.1
 
 import "../../auto_test"
+import "../../commont/commont.js" as Common
 
 Item {
 
@@ -53,8 +54,7 @@ Item {
         text: auto.folderListModel.folder
     }
 
-
-
-
-
+    Component.onCompleted: {
+        console.log(Qt.resolvedUrl("#").replace("#", ""));
+    }
 }
