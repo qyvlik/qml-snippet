@@ -1,30 +1,115 @@
 import QtQuick 2.0
+
 import "../sqml"
 
 SqlMapping {
     id: userDaoMapping
 
-    getById: "SELECT id, name FROM user WHERE id = ?"
-    getByIdArgs: entity ? [ entity ] : []
+    //@override
+    function get(entity) {
+        var ret = {
+            "sql": "",
+            "sqlArgs": []
+        };
 
-    get: "SELECT id, name FROM user WHERE id = ?"
-    getArgs: entity ? [ entity.id ] : []
+        if(typeof entity === 'undefined') {
+            return ret;
+        }
 
-    findList: ""
-    findListArgs: ""
+        ret.sql = "SELECT id, name FROM user";
 
-    findAllList: ""
-    findAllListArgs: ""
+        if(stringNotEmpty(entity.id)) {
+            ret.sql += " WHERE id = ?"
+            ret.sqlArgs.push(entity.id);
+        }
 
-    insert: "INSERT INTO user(name, id) VALUES(?, ?)"
-    insertArgs: entity ? [ entity.name, entity.id] : []
+        return ret;
+    }
 
-    update: ""
-    updateArgs: ""
+    //@override
+    function getByEntity(entity) {
+        return get(entity);
+    }
 
-    deleteById: ""
-    deleteByIdArgs: ""
+    //@override
+    function findList(entity) {
+        var ret = {
+            "sql": "",
+            "sqlArgs": []
+        };
 
-    deleteRecord: ""
-    deleteRecordArgs: ""
+        if(typeof entity === 'undefined') {
+            return ret;
+        }
+
+        ret.sql = "SELECT id, name FROM user";
+
+        if(stringNotEmpty(entity.id)) {
+            ret.sql += " WHERE id = ?"
+            ret.sqlArgs.push(entity.id);
+        }
+
+        return ret;
+    }
+
+    //@override
+    function insert(entity) {
+        var ret = {
+            "sql": "",
+            "sqlArgs": []
+        };
+
+        if(typeof entity === 'undefined') {
+            return ret;
+        }
+
+        ret.sql = "INSERT INTO user VALUES(?, ?)";
+
+        ret.sqlArgs.push(entity.id);
+        ret.sqlArgs.push(entity.name);
+
+        return ret;
+    }
+
+    //@override
+    function update(entity) {
+        var ret = {
+            "sql": "",
+            "sqlArgs": []
+        };
+
+        if(typeof entity === 'undefined') {
+            return ret;
+        }
+
+        ret.sql = "UPDATE user SET id=?, name=?";
+
+        ret.sqlArgs.push(entity.id);
+        ret.sqlArgs.push(entity.name);
+
+        return ret;
+    }
+
+    //@override
+    function deleteById(entity) {
+        var ret = {
+            "sql": "",
+            "sqlArgs": []
+        };
+
+        if(typeof entity === 'undefined') {
+            return ret;
+        }
+
+        ret.sql = "DELETE FROM user WHERE id = ?";
+
+        ret.sqlArgs.push(entity.id);
+
+        return ret;
+    }
+
+    //@override
+    function deleteRecord(entity) {
+        return deleteById(entity)
+    }
 }

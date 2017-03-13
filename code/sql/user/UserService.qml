@@ -1,11 +1,12 @@
 import QtQuick 2.0
+
 import "../sqml"
 
 CrudService {
     id: userService
 
     __dao: UserDao {
-        id: userDao
-        connection: userService.connection
+        __connection: userService.connection
+        debug: userService.debug
     }
 }

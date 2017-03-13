@@ -1,30 +1,80 @@
 import QtQuick 2.0
 
+// SqlMapping
 QtObject {
     id: sqlMapping
-    property var entity
 
-    property string getById
-    property var getByIdArgs
+    //@abstract
+    function get(entity) {
+        var sql = "";
+        var sqlArgs = [];
+        return {
+            "sql": "",
+            "sqlArgs": []
+        };
+    }
 
-    property string get
-    property var getArgs
+    //@abstract
+    function getByEntity(entity) {
+        var sql = "";
+        var sqlArgs = [];
+        return {
+            "sql": "",
+            "sqlArgs": []
+        };
+    }
 
-    property string findList
-    property var findListArgs
+    //@abstract
+    function findList(entity) {
+        var sql = "";
+        var sqlArgs = [];
+        return {
+            "sql": "",
+            "sqlArgs": []
+        };
+    }
 
-    property string findAllList
-    property var findAllListArgs
+    //@abstract
+    function insert(entity) {
+        var sql = "";
+        var sqlArgs = [];
+        return {
+            "sql": "",
+            "sqlArgs": []
+        };
+    }
 
-    property string insert
-    property var insertArgs
+    //@abstract
+    function update(entity) {
+        var sql = "";
+        var sqlArgs = [];
+        return {
+            "sql": "",
+            "sqlArgs": []
+        };
+    }
 
-    property string update
-    property var updateArgs
+    //@abstract
+    function deleteById(entity) {
+        var sql = "";
+        var sqlArgs = [];
+        return {
+            "sql": "",
+            "sqlArgs": []
+        };
+    }
 
-    property string deleteById
-    property var deleteByIdArgs
+    //@abstract
+    function deleteRecord(entity) {
+        var sql = "";
+        var sqlArgs = [];
+        return {
+            "sql": "",
+            "sqlArgs": []
+        };
+    }
 
-    property string deleteRecord
-    property var deleteRecordArgs
+    function stringNotEmpty(str) {
+        return typeof str !== 'undefined' && str !== '';
+    }
 }

@@ -1,122 +1,127 @@
 import QtQuick 2.0
 
+// CrudDao
 QtObject {
-    property DataBaseConnection connection: null
+    id: dao
 
-    property SqlMapping sqlMapping: null
+    readonly property var get: dao.__getImpl
+    readonly property var getByEntity: dao.__getByEntityImpl
+    readonly property var findList: dao.__findListImpl
+    readonly property var insert: dao.__insertImpl
+    readonly property var update: dao.__updateImpl
+    readonly property var deleteById: dao.__deleteByIdImpl
+    readonly property var deleteRecord: dao.__deleteRecordImpl
 
-    function getById(id, callback, error) {
-        // callback(result)
-        __executeSql(id, "getById", "getByIdArgs",
-                     true,
-                     function(results){
-                         if(results.rows.length > 1) {
-                             throw "getById should be only one result, result size: "
-                                     + results.rows.length;
-                         }
-                         callback(results.rows.item(0));
-                     }, error);
+    property bool debug: true
+
+    //protected:
+    property DatabaseConnection __connection: null
+    property SqlMapping __sqlMapping: null
+
+    //@abstract
+    function __getImpl(entity, callback, error) {
+        __executeSqlImpl(entity, __sqlMapping.get, false, function(results){
+            if(results.rows.length > 1) {
+                throw "getById should be only one result, result size: "
+                        + results.rows.length;
+            }
+            callback(results.rows.item(0));
+        }, error);
     }
 
-    function get(entity, callback, error) {
-        // callback(result)
-        __executeSql(entity, "get", "getArgs",
-                     true, function(results){
-                         if(results.rows.length > 1) {
-                             throw "getById should be only one result, result size: "
-                                     + results.length;
-                         }
-                         callback(results.item(0));
-                     }, error);
+    //@abstract
+    function __getByEntityImpl(entity, callback, error) {
+        __executeSqlImpl(entity, __sqlMapping.getByEntity, true, function(results){
+            if(results.rows.length > 1) {
+                throw "getById should be only one result, result size: "
+                        + results.rows.length;
+            }
+            callback(results.rows.item(0));
+        }, error);
     }
 
-    function findList(entity, callback, error) {
-        // callback(resultList)
-        __executeSql(entity, "findList", "findListArgs",
-                     true, function(results){
-                         var resultList = [];
-                         for(var i = 0; i < results.rows.length; i++) {
-                             resultList.push(results.rows.item(i));
-                         }
-                         callback(resultList);
-                     }, error);
+    //@abstract
+    function __findListImpl(entity, callback, error) {
+        __executeSqlImpl(entity, __sqlMapping.findList, true, function(results){
+            var resultList = [];
+            for(var i = 0; i < results.rows.length; i++) {
+                resultList.push(results.rows.item(i));
+            }
+            callback(resultList);
+        }, error);
     }
 
-    function findAllList(entity, callback, error) {
-        // callback(resultList)
-        __executeSql(entity, "findAllList", "findAllListArgs",
-                     true, function(results){
-                         var resultList = [];
-                         for(var i = 0; i < results.rows.length; i++) {
-                             resultList.push(results.rows.item(i));
-                         }
-                         callback(resultList);
-                     }, error);
+    //@abstract
+    function __insertImpl(entity, callback, error) {
+        __executeSqlImpl(entity, __sqlMapping.insert, false, function(results){
+            callback(results.rowsAffected);
+        }, error);
     }
 
-    function insert(entity, callback, error) {
-        // callback(rowsAffected)
-        __executeSql(entity, "insert", "insertArgs",
-                     false, function(results){
-                         callback(results.rowsAffected);
-                     }, error);
+    //@abstract
+    function __updateImpl(entity, callback, error) {
+        __executeSqlImpl(entity, __sqlMapping.update, false, function(results){
+            callback(results.rowsAffected);
+        }, error);
     }
 
-    function update(entity, callback, error) {
-        // callback(rowsAffected)
-        __executeSql(entity, "update", "updateArgs",
-                     false, function(results){
-                         callback(results.rowsAffected);
-                     }, error);
+    //@abstract
+    function __deleteByIdImpl(entity, callback, error) {
+        __executeSqlImpl(entity, __sqlMapping.deleteById, false, function(results){
+            callback(results.rowsAffected);
+        }, error);
     }
 
-    function deleteById(id, callback, error) {
-        // callback(rowsAffected)
-        __executeSql(entity, "deleteById", "deleteByIdArgs",
-                     false, function(results){
-                         callback(results.rowsAffected);
-                     }, error);
+    //@abstract
+    function __deleteRecordImpl(entity, callback, error) {
+        __executeSqlImpl(entity, __sqlMapping.deleteRecord, false, function(results){
+            callback(results.rowsAffected);
+        }, error);
     }
 
-    function deleteRecord(entity, callback, error) {
-        // callback(rowsAffected)
-        __executeSql(entity, "deleteRecord", "deleteRecordArgs",
-                     false, function(results){
-                         callback(results.rowsAffected);
-                     }, error);
-    }
-
-    function __check(entity) {
+    function __checkImpl(entity) {
         return connection != null
-                && sqlMapping != null
+                && __sqlMapping != null
                 && typeof entity !== 'undefined';
     }
 
-    function __executeSql(entity, sqlStringName, sqlArgsName, readOnly, callback, error) {
-        if(!__check(entity)) {
-            error("check error");
+
+    function __executeSqlImpl(entity, mapping, readOnly, callback, error) {
+        if(!__checkImpl(entity)) {
+            error(new Error("check error"));
             return;
         }
 
-        sqlMapping.entity = entity;
-        var sql = sqlMapping[sqlStringName];
-        var sqlArgs = sqlMapping[sqlArgsName];
-        sqlMapping.entity = undefined;
+        var ret = mapping(entity);
+        var sql = ret.sql;
+        var sqlArgs = ret.sqlArgs;
 
-        console.debug("sql : ", sql, " sqlArgs:", sqlArgs);
+        if(debug) {
+            console.debug("__executeSqlImpl : ", sql, " sqlArgs:", sqlArgs);
+        }
+
+
+        if(typeof sql === '' || sql === "") {
+            error(new Error("sql is empty"));
+            return;
+        }
+
 
         var transaction = readOnly ? connection.readTransaction
                                    : connection.transaction;
         transaction(function(tx){
             try {
                 var resultList = tx.executeSql(sql, sqlArgs);
-                console.debug("resultList lenght : ", resultList.rows.length
-                              , " rowsAffected : ", resultList.rowsAffected
-                              , " insertId : ", resultList.insertId);
+                if(debug) {
+                    console.debug("resultList lenght : ", resultList.rows.length
+                                  , " rowsAffected : ", resultList.rowsAffected
+                                  , " insertId : ", resultList.insertId);
+                }
                 callback(resultList);
             } catch(e) {
                 error(e);
             }
         });
     }
+
 }

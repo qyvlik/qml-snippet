@@ -3,46 +3,55 @@ import QtQuick 2.0
 QtObject {
     id: service
 
-    property DataBaseConnection connection
+    property DatabaseConnection connection
     readonly property alias dao: service.__dao
+    property bool debug: true
 
+    //protected:
     property CrudDao __dao
 
-    function getById(id, callback) {
-        dao.getById(id, callback, __throwError);
+    function get(entity, callback, error) {
+        error = error || __errorImpl;
+        dao.get(entity, callback, error);
     }
 
-    function get(entity, callback) {
-        dao.get(entity, callback, __throwError);
+    function getByEntity(entity, callback, error) {
+        error = error || __errorImpl;
+        dao.getByEntity(entity, callback, error);
     }
 
-    function findList(entity, callback) {
-        dao.findList(entity, callback, __throwError);
+    function findList(entity, callback, error) {
+        error = error || __errorImpl;
+        dao.findList(entity, callback, error);
     }
 
-    function findAllList(entity, callback) {
-        dao.findAllList(entity, callback, __throwError);
+    function insert(entity, callback, error) {
+        error = error || __errorImpl;
+        dao.insert(entity, callback, error);
     }
 
-    function insert(entity, callback) {
-        dao.insert(entity, callback, __throwError);
+    function update(entity, callback, error) {
+        error = error || __errorImpl;
+        dao.update(entity, callback, error);
     }
 
-    function update(entity, callback) {
-        dao.update(entity, callback, __throwError);
+    function deleteById(entity, callback, error) {
+        error = error || __errorImpl;
+        dao.deleteById(entity, callback, error);
     }
 
-    function deleteById(id, callback) {
-        dao.deleteById(id, callback, __throwError);
+    function deleteRecord(entity, callback, error) {
+        error = error || __errorImpl;
+        dao.deleteById(entity, callback, error);
     }
 
-    function deleteRecord(entity, callback) {
-        dao.deleteRecord(entity, callback, __throwError);
-    }
-
-    function __throwError(e) {
+    function __errorImpl(error) {
         console.trace();
-        console.log(e)
-        throw e;
+        console.log(error);
+        if(error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(error);
+        }
     }
 }

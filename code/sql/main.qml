@@ -1,4 +1,5 @@
 import QtQuick 2.0
+
 import "user"
 
 Item {
@@ -13,22 +14,36 @@ Item {
     UserService {
         id: userService
         connection: dataBase
+        debug: false
+    }
+
+    Component.onCompleted: {
+        dataBase.transaction(function (tx){
+            tx.executeSql('CREATE TABLE IF NOT EXISTS User(id TEXT, name TEXT)');
+        });
+    }
+
+    Component.onDestruction:  {
+        dataBase.transaction(function (tx){
+            tx.executeSql('DROP TABLE User');
+        });
     }
 
     MouseArea {
         anchors.fill: parent
         onClicked: {
             var user = {
-                id: "1",
-                name: "2"
+                id: Date.now(),
+                name: Math.random().toString().substring(0, 12)
             }
 
             userService.insert(user, function(size){
-                console.log("user: " , size);
+                console.log("size: " , size);
             });
-            userService.getById("1", function(user){
-                if(typeof user !== 'undefined') {
-                    console.log("user: " , "id", user.id, "name", user.name);
+
+            userService.findList({}, function(list){
+                for(var iter in list) {
+                    console.log("user: ", JSON.stringify(list[iter]));
                 }
             });
         }

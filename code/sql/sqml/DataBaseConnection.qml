@@ -1,18 +1,19 @@
 import QtQuick 2.0
 import QtQuick.LocalStorage 2.0
 
+// DatabaseConnection
 QtObject {
+    id: databaseConnection
 
     property string identifier: ""
     property string version: ""
     property string description: ""
-    property int estimated_size: 0
+    property int estimatedSize: 0
+    property bool isOpen: false
 
     readonly property var database: __database
 
     property var __database
-    property bool isOpen: false
-
 
     function __tryOpen() {
         if(!isOpen) {
@@ -25,11 +26,11 @@ QtObject {
             return;
         }
 
-        if(identifier !== '' && version !== '' && description !== '' && estimated_size != 0) {
+        if(identifier !== '' && version !== '' && description !== '' && estimatedSize != 0) {
             __database = LocalStorage.openDatabaseSync(identifier,
                                                        version,
                                                        description,
-                                                       estimated_size);
+                                                       estimatedSize);
             isOpen = true;
         } else {
             throw "arguments lost!";
