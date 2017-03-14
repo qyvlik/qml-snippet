@@ -1,3 +1,4 @@
+// [brix/crypto-js](https://github.com/brix/crypto-js)
 Qt.include("./src/core.js");
 Qt.include("./src/lib-typedarrays.js");
 Qt.include("./src/x64-core.js");

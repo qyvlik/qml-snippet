@@ -42,4 +42,38 @@ function encrypt(word){
 }
 ```
 
+```
+// 加密
+function encryptAES(content, key) {
+    var CryptoJS = CryptoJSLib.CryptoJS;
+    var AES = CryptoJS.AES;
+    var ivStr  = CryptoJS.enc.Utf8.parse(iv);
+    var keyStr = CryptoJS.enc.Utf8.parse(key);
+
+    var text = AES.encrypt(content, keyStr, {
+                                    iv: ivStr,
+                                    mode: CryptoJS.mode.CBC,
+                                    padding: CryptoJS.pad.Pkcs7
+                                });
+    return text.toString();
+}
+
+// 解密
+function decryptAES(ciphertext, key) {
+    var CryptoJS = CryptoJSLib.CryptoJS;
+    var AES = CryptoJS.AES;
+    var ivStr  = CryptoJS.enc.Utf8.parse(iv);
+    var keyStr = CryptoJS.enc.Utf8.parse(key);
+
+    var bytes = AES.decrypt(ciphertext, keyStr, {
+                                    iv: ivStr,
+                                    mode: CryptoJS.mode.CBC,
+                                    padding: CryptoJS.pad.Pkcs7
+                                });
+    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+    return plaintext.toString();
+}
+//! [AES encryption working between Objective-C and Java.](https://github.com/WelkinXie/AESCipher-Java)
+```
+
 
