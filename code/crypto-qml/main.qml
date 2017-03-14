@@ -1,17 +1,14 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.1
+import QtQuick.Controls 2.0
 
 import "./crypto-js/crypto-js.js" as CryptoJSLib
+import "../commont/commont.js" as Commont
 
 Item {
 
-    width: 360
-    height: 640
-
-    function listAll() {
-        for(var iter in CryptoJSLib["CryptoJS"]) {
-            console.log(iter, CryptoJSLib["CryptoJS"][iter])
-        }
-    }
+    width: 240
+    height: 320
 
     function testMd5() {
         var encrypted = CryptoJSLib.CryptoJS.MD5("");
@@ -23,10 +20,9 @@ Item {
         console.log("SHA256:", encrypted);
     }
 
-    readonly property string iv: "16-Bytes--String"
+    readonly property string iv: "16BytesLengthKey"
 
     ///! [WelkinXie/AESCipher-Java](https://github.com/WelkinXie/AESCipher-Java)
-    // 加密
     function encryptAES(content, key) {
         var CryptoJS = CryptoJSLib.CryptoJS;
         var AES = CryptoJS.AES;
@@ -34,14 +30,13 @@ Item {
         var keyStr = CryptoJS.enc.Utf8.parse(key);
 
         var text = AES.encrypt(content, keyStr, {
-                                        iv: ivStr,
-                                        mode: CryptoJS.mode.CBC,
-                                        padding: CryptoJS.pad.Pkcs7
-                                    });
+                                   iv: ivStr,
+                                   mode: CryptoJS.mode.CBC,
+                                   padding: CryptoJS.pad.Pkcs7
+                               });
         return text.toString();
     }
 
-    // 解密
     function decryptAES(ciphertext, key) {
         var CryptoJS = CryptoJSLib.CryptoJS;
         var AES = CryptoJS.AES;
@@ -49,22 +44,37 @@ Item {
         var keyStr = CryptoJS.enc.Utf8.parse(key);
 
         var bytes = AES.decrypt(ciphertext, keyStr, {
-                                        iv: ivStr,
-                                        mode: CryptoJS.mode.CBC,
-                                        padding: CryptoJS.pad.Pkcs7
-                                    });
+                                    iv: ivStr,
+                                    mode: CryptoJS.mode.CBC,
+                                    padding: CryptoJS.pad.Pkcs7
+                                });
         var plaintext = bytes.toString(CryptoJS.enc.Utf8);
         return plaintext.toString();
     }
 
 
-    MouseArea {
+    ColumnLayout {
         anchors.fill: parent
-        onClicked: {
-            var ciphertext = encryptAES("IAmThePlainText", "16BytesLengthKey");
-            console.log("ciphertext ", ciphertext );
-            var text = decryptAES(ciphertext, "16BytesLengthKey");
-            console.log("text ", text )
+        anchors.margins: 10
+
+        Button {
+            text: "test aes"
+            Layout.fillWidth: true
+            onClicked: {
+                testAES1();
+            }
         }
+
+        Item {
+            Layout.fillHeight: true
+        }
+    }
+
+    function testAES1() {
+        var message = "IAmThePlainText";
+        var ciphertext = encryptAES(message, "16BytesLengthKey");
+        console.log("ciphertext ", ciphertext );
+        var text = decryptAES(ciphertext, "16BytesLengthKey");
+        console.log("text ", text );
     }
 }
