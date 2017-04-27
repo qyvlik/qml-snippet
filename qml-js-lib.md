@@ -39,3 +39,7 @@
 [tronlec/three.js](https://github.com/tronlec/three.js)
 
 > JavaScript 3D library. http://threejs.org/
+
+[kazuhikoarase/qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator)
+
+> qrcode

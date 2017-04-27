@@ -2106,3 +2106,15 @@ var qrcode = function() {
 }(function () {
     return qrcode;
 }));
+
+//! [qrcode_UTF8.js](https://github.com/kazuhikoarase/qrcode-generator/blob/master/js/qrcode_UTF8.js)
+//! for chinese
+!function(qrcode) {
+
+  //---------------------------------------------------------------------
+  // overwrite qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
+
+}(qrcode);

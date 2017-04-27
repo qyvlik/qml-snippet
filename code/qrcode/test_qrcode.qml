@@ -7,8 +7,8 @@ Item {
 
     QRCode {
         id: qrCode
-        type: 10
-        qrCodeCellSize: 3
-        value: "import QtQuick 2.0dadfdsdddddddddddddddddddddddddddddddddddddd"
+        type: 4
+        qrCodeCellSize: 12
+        value: "import QtQuick 2.中文"
     }
 }
