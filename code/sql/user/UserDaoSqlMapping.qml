@@ -7,23 +7,16 @@ SqlMapping {
 
     //@override
     function get(entity) {
-        var ret = {
-            "sql": "",
-            "sqlArgs": []
-        };
 
-        if(typeof entity === 'undefined') {
-            return ret;
-        }
-
-        ret.sql = "SELECT id, name FROM user";
+        sqlQueryBuilder.select(['id', 'name'])
+        .from('user');
 
         if(stringNotEmpty(entity.id)) {
-            ret.sql += " WHERE id = ?"
-            ret.sqlArgs.push(entity.id);
+            sqlQueryBuilder.where();
+            sqlQueryBuilder.equals('id', entity.id);
         }
 
-        return ret;
+        return sqlQueryBuilder.dump();
     }
 
     //@override
@@ -33,79 +26,45 @@ SqlMapping {
 
     //@override
     function findList(entity) {
-        var ret = {
-            "sql": "",
-            "sqlArgs": []
-        };
 
-        if(typeof entity === 'undefined') {
-            return ret;
-        }
-
-        ret.sql = "SELECT id, name FROM user";
+        sqlQueryBuilder.select(['id', 'name'])
+        .from('user');
 
         if(stringNotEmpty(entity.id)) {
-            ret.sql += " WHERE id = ?"
-            ret.sqlArgs.push(entity.id);
+            sqlQueryBuilder.where();
+            sqlQueryBuilder.equals('id', entity.id);
         }
 
-        return ret;
+        return sqlQueryBuilder.dump();
     }
 
     //@override
     function insert(entity) {
-        var ret = {
-            "sql": "",
-            "sqlArgs": []
-        };
+        sqlQueryBuilder.insertInto('user',
+                                   ['id', 'name'],
+                                   [entity.id, entity.name]);
 
-        if(typeof entity === 'undefined') {
-            return ret;
-        }
-
-        ret.sql = "INSERT INTO user VALUES(?, ?)";
-
-        ret.sqlArgs.push(entity.id);
-        ret.sqlArgs.push(entity.name);
-
-        return ret;
+        return sqlQueryBuilder.dump();
     }
 
     //@override
     function update(entity) {
-        var ret = {
-            "sql": "",
-            "sqlArgs": []
-        };
+        sqlQueryBuilder.update('user', {
+                                   'name': entity.name
+                               })
+        .where()
+        .equals('id', entity.id);
 
-        if(typeof entity === 'undefined') {
-            return ret;
-        }
-
-        ret.sql = "UPDATE user SET id=?, name=?";
-
-        ret.sqlArgs.push(entity.id);
-        ret.sqlArgs.push(entity.name);
-
-        return ret;
+        return sqlQueryBuilder.dump();
     }
 
     //@override
     function deleteById(entity) {
-        var ret = {
-            "sql": "",
-            "sqlArgs": []
-        };
+        sqlQueryBuilder.deleteFrom('user')
+        .where()
+        .equals('id', entity.id);
 
-        if(typeof entity === 'undefined') {
-            return ret;
-        }
-
-        ret.sql = "DELETE FROM user WHERE id = ?";
-
-        ret.sqlArgs.push(entity.id);
-
-        return ret;
+        return sqlQueryBuilder.dump();
     }
 
     //@override

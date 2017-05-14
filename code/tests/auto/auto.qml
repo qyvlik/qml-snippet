@@ -56,5 +56,6 @@ Item {
 
     Component.onCompleted: {
         console.log(Qt.resolvedUrl("#").replace("#", ""));
+        console.log(Common.randomString(32, true))
     }
 }

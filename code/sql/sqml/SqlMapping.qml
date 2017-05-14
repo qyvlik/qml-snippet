@@ -4,74 +4,46 @@ import QtQuick 2.0
 QtObject {
     id: sqlMapping
 
+    property bool debug: false
+
+    property alias sqlQueryBuilder: sqlMapping.__sqlQueryBuilder
+
+    readonly property SqlQueryBuilder __sqlQueryBuilder: SqlQueryBuilder {
+    }
+
     //@abstract
     function get(entity) {
-        var sql = "";
-        var sqlArgs = [];
-        return {
-            "sql": "",
-            "sqlArgs": []
-        };
+        return sqlQueryBuilder.dump();
     }
 
     //@abstract
     function getByEntity(entity) {
-        var sql = "";
-        var sqlArgs = [];
-        return {
-            "sql": "",
-            "sqlArgs": []
-        };
+        return sqlQueryBuilder.dump();
     }
 
     //@abstract
     function findList(entity) {
-        var sql = "";
-        var sqlArgs = [];
-        return {
-            "sql": "",
-            "sqlArgs": []
-        };
+        return sqlQueryBuilder.dump();
     }
 
     //@abstract
     function insert(entity) {
-        var sql = "";
-        var sqlArgs = [];
-        return {
-            "sql": "",
-            "sqlArgs": []
-        };
+        return sqlQueryBuilder.dump();
     }
 
     //@abstract
     function update(entity) {
-        var sql = "";
-        var sqlArgs = [];
-        return {
-            "sql": "",
-            "sqlArgs": []
-        };
+        return sqlQueryBuilder.dump();
     }
 
     //@abstract
     function deleteById(entity) {
-        var sql = "";
-        var sqlArgs = [];
-        return {
-            "sql": "",
-            "sqlArgs": []
-        };
+        return sqlQueryBuilder.dump();
     }
 
     //@abstract
     function deleteRecord(entity) {
-        var sql = "";
-        var sqlArgs = [];
-        return {
-            "sql": "",
-            "sqlArgs": []
-        };
+        return sqlQueryBuilder.dump();
     }
 
     function stringNotEmpty(str) {

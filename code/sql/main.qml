@@ -32,8 +32,9 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
+            var sqlId = Date.now();
             var user = {
-                id: Date.now(),
+                id: sqlId,
                 name: Math.random().toString().substring(0, 12)
             }
 
@@ -41,7 +42,9 @@ Item {
                 console.log("size: " , size);
             });
 
-            userService.findList({}, function(list){
+            console.log("sqlId", sqlId)
+
+            userService.findList({id: sqlId}, function(list){
                 for(var iter in list) {
                     console.log("user: ", JSON.stringify(list[iter]));
                 }

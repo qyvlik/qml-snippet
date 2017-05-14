@@ -10,10 +10,20 @@ QtObject {
     property string description: ""
     property int estimatedSize: 0
     property bool isOpen: false
+    property bool debug: false
 
     readonly property var database: __database
 
     property var __database
+
+    onIdentifierChanged: {
+        __reOpen();
+    }
+
+    function __reOpen() {
+        isOpen = false;
+        __tryOpen();
+    }
 
     function __tryOpen() {
         if(!isOpen) {

@@ -31,9 +31,7 @@ function ajax(method, url, headers, data, callable) {
     }
     var xhr = new XMLHttpRequest;
     xhr.onreadystatechange = function() {
-        if(xhr.readyState == xhr.DONE) {
-            callable(xhr);
-        }
+        callable(xhr);
     };
     xhr.open(method, url);
     setHeader(xhr, headers);

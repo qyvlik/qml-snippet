@@ -77,4 +77,10 @@ Item {
         var text = decryptAES(ciphertext, "16BytesLengthKey");
         console.log("text ", text );
     }
+
+    Component.onCompleted: {
+        console.log(Commont.randomString(16))
+        var encrypted = CryptoJSLib.CryptoJS.SHA256("045b3aaa284d169c5ae2d20d0b0673468ed3506aa8fea5976eacaf1ff304456f6522fbce1a646a24005b8b8e771a671f564ca6c03e484a1c394bf96e2a4ad01dce OP_CHECKSIG");
+        console.log("SHA256:", encrypted);
+    }
 }
