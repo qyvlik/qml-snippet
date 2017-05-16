@@ -1,6 +1,7 @@
 import QtSensors 5.1
 import QtQuick 2.0
 
+// import "./3rdparty/ckknight/random-js/lib/random.min.js" as RandomLib
 import "./3rdparty/ckknight/random-js/lib/random.js" as RandomLib
 
 Item {
@@ -12,7 +13,7 @@ Item {
         var d = mt();
         d = mt.seed(1);
 
-        console.log(d())
+        console.log(d());
     }
 
 }
